@@ -22,10 +22,10 @@ base_url = "http://peir.path.uab.edu/library"
 
 # create dataset and images folder
 try:
-	rmtree("peir_gross/peir_gross_images/")
+	rmtree("dataset/peir_gross/peir_gross_images/")
 except BaseException:
 	pass
-os.makedirs("peir_gross/peir_gross_images/")
+os.makedirs("dataset/peir_gross/peir_gross_images/")
 
 image_captions = {}
 image_tags = {}
@@ -94,7 +94,7 @@ for url in categories_urls:
 				image_tags[filename] = tags
 
 				# save the image to images folder
-				with open( "peir_gross/peir_gross_images/" + filename, "wb") as f:
+				with open( "dataset/peir_gross/peir_gross_images/" + filename, "wb") as f:
 					image_file = requests.get(base_url + "/" + image_src)
 					f.write(image_file.content)
 
@@ -116,16 +116,11 @@ for url in categories_urls:
 		print("Extracted", image_sum, "image-caption pairs from the", category_soup.find("li", class_="selected").find("a").get_text(), "category")
 
 
-with open("peir_gross/peir_gross.tsv", "w") as output_file:
+with open("dataset/peir_gross/peir_gross.tsv", "w") as output_file:
 	for image in image_captions:
 		output_file.write(image + "\t" + image_captions[image])
 		output_file.write("\n")
 
-# JSON saving
-with open("peir_gross/peir_gross_captions.json", "w") as output_file:
-    output_file.write(json.dumps(image_captions))
-with open("peir_gross/peir_gross_tags.json", "w") as output_file:
-    output_file.write(json.dumps(image_tags))
 
 
 print("Wrote all", len(image_captions), "image-caption pairs to tsv.")
@@ -140,5 +135,7 @@ train_split = int(numpy.floor(len(image_captions) * 0.9))
 train_keys = keys[:train_split]
 test_keys = keys[train_split:]
 
-split_images(image_captions, train_keys, "peir_gross/train_images.tsv")
-split_images(image_captions, test_keys, "peir_gross/test_images.tsv")
+split_images(image_captions, train_keys, "dataset/peir_gross/train_images.tsv")
+split_images(image_captions, test_keys, "dataset/peir_gross/test_images.tsv")
+
+os.remove('dataset/peir_gross/peir_gross.tsv')
