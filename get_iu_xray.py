@@ -117,13 +117,6 @@ with open("iu_xray/iu_xray.tsv", "w") as output_file:
         output_file.write(image_caption + "\t" + images_captions[image_caption])
         output_file.write("\n")
 
-# Safer JSON storing
-with open("iu_xray/iu_xray_captions.json", "w") as output_file:
-    output_file.write(json.dumps(images_captions))
-with open("iu_xray/iu_xray_major_tags.json", "w") as output_file:
-    output_file.write(json.dumps(images_major_tags))
-with open("iu_xray/iu_xray_auto_tags.json", "w") as output_file:
-    output_file.write(json.dumps(images_auto_tags))
 
 # perform a case based split
 random.seed(42)
@@ -140,3 +133,6 @@ test_path = "dataset/iu_xray/test_images.tsv"
 
 split_cases(reports_with_images, text_of_reports, train_keys, train_path)
 split_cases(reports_with_images, text_of_reports, test_keys, test_path)
+os.remove('iu_xray/NLMCXR_png.tgz')
+os.remove('iu_xray/NLMCXR_reports.tgz')
+os.remove('iu_xray/iu_xray.tsv')
