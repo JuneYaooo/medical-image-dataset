@@ -21,26 +21,26 @@ def split_cases(reports_images, reports_text, keys, filename):
 
 # create dataset folder
 try:
-    rmtree("iu_xray/")
+    rmtree("dataset/iu_xray/")
 except BaseException:
     pass
-os.makedirs("iu_xray/")
+os.makedirs("dataset/iu_xray/")
 
 # download PNG images
-os.system("wget -P iu_xray/ https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz")
+os.system("wget -P dataset/iu_xray/ https://openi.nlm.nih.gov/imgs/collections/NLMCXR_png.tgz")
 
 # download reports
-os.system("wget -P iu_xray/ https://openi.nlm.nih.gov/imgs/collections/NLMCXR_reports.tgz")
+os.system("wget -P dataset/iu_xray/ https://openi.nlm.nih.gov/imgs/collections/NLMCXR_reports.tgz")
 
 # create folder for images
-os.makedirs("iu_xray/iu_xray_images/")
+os.makedirs("dataset/iu_xray/iu_xray_images/")
 
 # unzip
-os.system("tar -xzf ./iu_xray/NLMCXR_png.tgz -C iu_xray/iu_xray_images/")
-os.system("tar -xzf ./iu_xray/NLMCXR_reports.tgz -C iu_xray/")
+os.system("tar -xzf ./dataset/iu_xray/NLMCXR_png.tgz -C dataset/iu_xray/iu_xray_images/")
+os.system("tar -xzf ./dataset/iu_xray/NLMCXR_reports.tgz -C dataset/iu_xray/")
 
 # read the reports xml files and create the dataset tsv
-reports_path = "iu_xray/ecgen-radiology"
+reports_path = "dataset/iu_xray/ecgen-radiology"
 
 reports = os.listdir(reports_path)
 
@@ -112,7 +112,7 @@ print("Found", len(reports_with_no_findings), "reports with no Findings section"
 
 print("Collected", len(images_captions), "image-caption pairs")
 
-with open("iu_xray/iu_xray.tsv", "w") as output_file:
+with open("dataset/iu_xray/iu_xray.tsv", "w") as output_file:
     for image_caption in images_captions:
         output_file.write(image_caption + "\t" + images_captions[image_caption])
         output_file.write("\n")
@@ -123,7 +123,7 @@ random.seed(42)
 keys = list(reports_with_images.keys())
 random.shuffle(keys)
 
-train_split = int(numpy.floor(len(reports_with_images) * 0.9))
+train_split = int(numpy.floor(len(reports_with_images) * 0.8))
 
 train_keys = keys[:train_split]
 test_keys = keys[train_split:]
@@ -133,6 +133,7 @@ test_path = "dataset/iu_xray/test_images.tsv"
 
 split_cases(reports_with_images, text_of_reports, train_keys, train_path)
 split_cases(reports_with_images, text_of_reports, test_keys, test_path)
-os.remove('iu_xray/NLMCXR_png.tgz')
-os.remove('iu_xray/NLMCXR_reports.tgz')
-os.remove('iu_xray/iu_xray.tsv')
+
+os.remove('dataset/iu_xray/NLMCXR_png.tgz')
+os.remove('dataset/iu_xray/NLMCXR_reports.tgz')
+os.remove('dataset/iu_xray/iu_xray.tsv')
