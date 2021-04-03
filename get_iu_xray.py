@@ -135,8 +135,8 @@ train_split = int(numpy.floor(len(reports_with_images) * 0.9))
 train_keys = keys[:train_split]
 test_keys = keys[train_split:]
 
-train_path = "iu_xray/train_images.tsv"
-test_path = "iu_xray/test_images.tsv"
+train_path = "dataset/iu_xray/train_images.tsv"
+test_path = "dataset/iu_xray/test_images.tsv"
 
 split_cases(reports_with_images, text_of_reports, train_keys, train_path)
 split_cases(reports_with_images, text_of_reports, test_keys, test_path)
